@@ -1,6 +1,7 @@
 package com.agentdesk.common.core.exception.base;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.io.Serial;
 
@@ -10,6 +11,7 @@ import java.io.Serial;
  * @description 基础异常类
  */
 @AllArgsConstructor
+@Getter
 public class BaseException extends RuntimeException {
 
     @Serial
