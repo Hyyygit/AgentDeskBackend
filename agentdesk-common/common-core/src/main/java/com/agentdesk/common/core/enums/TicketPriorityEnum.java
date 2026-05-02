@@ -11,10 +11,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum TicketPriorityEnum {
-    P1("紧急"),
-    P2("高"),
-    P3("中"),
-    P4("低");
+    P1(1, "紧急"),
+    P2(2, "高"),
+    P3(3, "中"),
+    P4(4, "低");
 
+    private final Integer level;
     private final String description;
 }

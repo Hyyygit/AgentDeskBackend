@@ -11,13 +11,14 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 public enum TicketStatusEnum {
-    NEW("新建"),
-    TRIAGED("已分诊"),
-    DECIDED("已决策"),
-    IN_PROGRESS("处理中"),
-    WAITING_HUMAN("等待人工"),
-    RESOLVED("已解决"),
-    CLOSED("已关闭");
+    NEW(1, "新建"),
+    TRIAGED(2, "已分诊"),
+    DECIDED(3, "已决策"),
+    IN_PROGRESS(4, "处理中"),
+    WAITING_HUMAN(5, "等待人工"),
+    RESOLVED(6, "已解决"),
+    CLOSED(7, "已关闭");
 
+    private final int status;
     private final String description;
 }
