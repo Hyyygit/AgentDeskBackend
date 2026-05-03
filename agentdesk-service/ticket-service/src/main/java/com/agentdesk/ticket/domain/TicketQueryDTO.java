@@ -39,7 +39,7 @@ public class TicketQueryDTO implements Serializable {
     @Schema(description = "工单关闭时间")
     private Date closedTime;//工单关闭时间
     @Schema(description = "提单的用户主键ID")
-    private Integer comeUpUserId;//提单的用户主键ID
+    private Integer userId;//提单的用户主键ID
     @Schema(description = "工单类型")
     private Integer conversationId;//关联的会话ID
     @Schema(description = "工单创建时间")

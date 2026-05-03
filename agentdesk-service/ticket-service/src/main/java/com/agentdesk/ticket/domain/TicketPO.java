@@ -31,6 +31,6 @@ public class TicketPO extends BaseEntity {
     private Date resolvedTime;//工单解决时间
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date closedTime;//工单关闭时间
-    private Integer comeUpUserId;//提单的用户主键ID
+    private Integer userId;//提单的用户主键ID
     private Integer conversationId;//关联的会话ID
 }

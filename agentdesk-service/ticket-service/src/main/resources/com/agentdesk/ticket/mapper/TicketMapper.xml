@@ -8,7 +8,7 @@
         select t.id, t.ticket_no, t.ticket_category, t.priority, t.status,
         t.summary, t.description, t.source, t.assigned_group,
         t.assigned_user_id, t.dead_line, t.resolved_time, t.closed_time,
-        t.come_up_user_id, t.conversation_id, t.create_time, t.update_time from ticket t
+        t.user_id, t.conversation_id, t.create_time, t.update_time from ticket t
     </sql>
     <select id="selectTicketList"
             resultType="com.agentdesk.ticket.domain.TicketPO"
@@ -32,8 +32,8 @@
                 #{resolvedTime}
             </if>
             <if test="closedTime != null">and t.closed_time = #{closedTime}</if>
-            <if test="comeUpUserId != null">and t.come_up_user_id =
-                #{comeUpUserId}
+            <if test="userId != null">and t.user_id =
+                #{userId}
             </if>
             <if test="conversationId != null">and t.conversation_id =
                 #{conversationId}
