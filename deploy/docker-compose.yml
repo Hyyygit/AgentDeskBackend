@@ -5,8 +5,8 @@ services:
     image: nacos/nacos-server:v2.3.2
     container_name: agentdesk-nacos
     ports:
-      - "8848:8848"
-      - "9848:9848"
+      - "18848:8848"
+      - "19848:9848"
     environment:
       MODE: standalone
       PREFER_HOST_MODE: hostname
@@ -34,7 +34,7 @@ services:
     image: redis:7-alpine
     container_name: agentdesk-redis
     ports:
-      - "6379:6379"
+      - "16379:6379"
     volumes:
       - redis-data:/data
     healthcheck:
@@ -46,8 +46,8 @@ services:
     image: rabbitmq:3.13-management-alpine
     container_name: agentdesk-rabbitmq
     ports:
-      - "5672:5672"
-      - "15672:15672"
+      - "5673:5672"
+      - "15673:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest

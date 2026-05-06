@@ -1,11 +1,6 @@
 server:
   port: 9007
-spring:
-  application:
-    name: ops-admin-service
-jwt:
-  secret: YWdlbnRkZXNrLWludGVsbGlnZW50LXdvcmstb3JkZXItc3lzdGVtLXNlY3JldC1rZXktMjAyNg==
-  access-token-expiration: 1800000
+
 management:
   endpoints:
     web:

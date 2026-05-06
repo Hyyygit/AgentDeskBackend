@@ -4,13 +4,13 @@ spring:
   cloud:
     nacos:
       discovery:
-        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
-        namespace: ${NACOS_NAMESPACE:agentdesk}
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:18848}
+        namespace: ${NACOS_NAMESPACE:72c65630-17c3-4239-b14d-dd92d3705774}
       config:
-        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
-        namespace: ${NACOS_NAMESPACE:agentdesk}
-        file-extension: yaml
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:18848}
+        namespace: ${NACOS_NAMESPACE:72c65630-17c3-4239-b14d-dd92d3705774}
+        file-extension: yml
         shared-configs:
-          - data-id: agentdesk-common.yaml
+          - data-id: agentdesk-common.yml
             group: DEFAULT_GROUP
             refresh: true
