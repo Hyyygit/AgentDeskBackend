@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  nacos:
+    image: nacos/nacos-server:v2.3.2
+    container_name: agentdesk-nacos
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+    environment:
+      MODE: standalone
+      PREFER_HOST_MODE: hostname
+    volumes:
+      - nacos-data:/home/nacos/data
+
   mysql:
     image: mysql:8.0
     container_name: agentdesk-mysql
@@ -28,6 +40,22 @@ services:
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       timeout: 5s
+      retries: 5
+
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    container_name: agentdesk-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      timeout: 10s
       retries: 5
 
   gateway-service:
@@ -141,5 +169,7 @@ services:
       - gateway-service
 
 volumes:
+  nacos-data:
   mysql-data:
   redis-data:
+  rabbitmq-data:

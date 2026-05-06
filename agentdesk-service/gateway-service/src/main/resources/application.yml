@@ -5,6 +5,10 @@ spring:
   application:
     name: gateway-service
   cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:agentdesk}
     gateway:
       discovery:
         locator:
@@ -12,7 +16,7 @@ spring:
       routes:
         # Auth/User Service
         - id: user-service
-          uri: http://localhost:9001
+          uri: lb://user-service
           predicates:
             - Path=/api/user/**
           filters:
@@ -20,7 +24,7 @@ spring:
         
         # Conversation Service
         - id: conversation-service
-          uri: http://localhost:9002
+          uri: lb://conversation-service
           predicates:
             - Path=/api/conversations/**
           filters:
@@ -28,7 +32,7 @@ spring:
         
         # Ticket Service
         - id: ticket-service
-          uri: http://localhost:9000
+          uri: lb://ticket-service
           predicates:
             - Path=/api/tickets/**
           filters:
@@ -36,7 +40,7 @@ spring:
         
         # Knowledge Service
         - id: knowledge-service
-          uri: http://localhost:9003
+          uri: lb://knowledge-service
           predicates:
             - Path=/api/knowledge/**
           filters:
@@ -44,7 +48,7 @@ spring:
         
         # Orchestrator Service
         - id: orchestrator-service
-          uri: http://localhost:9005
+          uri: lb://agent-orchestrator-service
           predicates:
             - Path=/api/orchestrator/**
           filters:
@@ -52,7 +56,7 @@ spring:
         
         # Audit Service
         - id: audit-log-service
-          uri: http://localhost:9004
+          uri: lb://audit-log-service
           predicates:
             - Path=/api/audit/**,/api/log/**
           filters:

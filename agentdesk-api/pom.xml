@@ -20,6 +20,7 @@
         <module>api-orchestrator</module>
         <module>api-notification</module>
         <module>api-audit</module>
+        <module>api-event</module>
     </modules>
 
     <properties>

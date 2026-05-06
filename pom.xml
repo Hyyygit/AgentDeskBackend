@@ -108,6 +108,24 @@
                 <scope>import</scope>
             </dependency>
 
+            <!-- spring-cloud-alibaba -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>2023.0.3.2</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- spring-ai -->
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
             <!-- hutool工具�?-->
             <dependency>
                 <groupId>cn.hutool</groupId>
@@ -271,6 +289,11 @@
                 <artifactId>api-user</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.agentdesk</groupId>
+                <artifactId>api-event</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- spring-cloud-starter-openfeign -->
             <dependency>
@@ -286,6 +309,13 @@
                 <version>4.3.2</version>
             </dependency>
 
+            <!-- spring-boot-starter-amqp -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-amqp</artifactId>
+                <version>3.5.13</version>
+            </dependency>
+
             <!-- spring-boot-starter-validation -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -298,6 +328,25 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-actuator</artifactId>
                 <version>3.5.13</version>
+            </dependency>
+
+            <!-- nacos-discovery -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+                <version>2023.0.3.2</version>
+            </dependency>
+            <!-- nacos-config -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+                <version>2023.0.3.2</version>
+            </dependency>
+            <!-- spring-cloud-starter-bootstrap (required for bootstrap.yml in SB 3.x) -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-bootstrap</artifactId>
+                <version>4.3.2</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

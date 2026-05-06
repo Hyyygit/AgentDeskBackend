@@ -9,4 +9,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @description Agent运行日志服务
  */
 public interface IAgentRunLogService extends IService<AgentRunLogPO> {
+
+    void saveLog(String requestId, String agentName, String inputPayload, String outputPayload,
+                 Double confidence, String gateResult, Integer latencyMs, String errorMessage);
 }

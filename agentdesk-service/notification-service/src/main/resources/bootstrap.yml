@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: notification-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:agentdesk}
+      config:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:agentdesk}
+        file-extension: yaml
+        shared-configs:
+          - data-id: agentdesk-common.yaml
+            group: DEFAULT_GROUP
+            refresh: true

@@ -1,6 +1,8 @@
 package com.agentdesk.ticket.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.agentdesk.api.event.MqConstants;
+import com.agentdesk.api.event.TicketEvent;
 import com.agentdesk.api.notification.dto.SendNotificationRequest;
 import com.agentdesk.api.notification.feign.NotificationFeignClient;
 import com.agentdesk.api.ticket.dto.TicketCreateRequest;
@@ -16,10 +18,13 @@ import com.agentdesk.ticket.service.ITicketService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
@@ -41,6 +46,9 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketPO> imple
     private final ITicketActionLogService actionLogService;
     private final RedisUtils redisUtils;
     private final NotificationFeignClient notificationFeignClient;
+
+    @Autowired(required = false)
+    private RabbitTemplate rabbitTemplate;
 
     private static final int OPERATOR_SYSTEM = 1;
     private static final int OPERATOR_USER = 2;
@@ -78,6 +86,24 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketPO> imple
             notificationFeignClient.send(noti);
         } catch (Exception e) {
             log.warn("发送通知失败: {}", e.getMessage());
+        }
+
+        if (rabbitTemplate != null) {
+            try {
+                TicketEvent event = TicketEvent.builder()
+                    .eventType("CREATED")
+                    .ticketId(ticket.getId())
+                    .ticketNo(ticket.getTicketNo())
+                    .userId(userId)
+                    .summary(ticket.getSummary())
+                    .ticketCategory(ticket.getTicketCategory())
+                    .priority(ticket.getPriority())
+                    .timestamp(LocalDateTime.now())
+                    .build();
+                rabbitTemplate.convertAndSend(MqConstants.EXCHANGE_NAME, MqConstants.KEY_TICKET_CREATED, event);
+            } catch (Exception e) {
+                log.warn("Failed to publish ticket created event", e);
+            }
         }
 
         return ticket;
@@ -141,6 +167,25 @@ public class TicketServiceImpl extends ServiceImpl<TicketMapper, TicketPO> imple
             notificationFeignClient.send(noti);
         } catch (Exception e) {
             log.warn("发送通知失败: {}", e.getMessage());
+        }
+
+        if (rabbitTemplate != null) {
+            try {
+                TicketEvent event = TicketEvent.builder()
+                    .eventType("STATUS_CHANGED")
+                    .ticketId(ticketId)
+                    .ticketNo(ticket.getTicketNo())
+                    .oldStatus(oldStatus)
+                    .newStatus(newStatus)
+                    .userId(ticket.getUserId())
+                    .summary(ticket.getSummary())
+                    .timestamp(LocalDateTime.now())
+                    .build();
+                String routingKey = newStatus == 6 ? MqConstants.KEY_TICKET_RESOLVED : MqConstants.KEY_TICKET_STATUS_CHANGED;
+                rabbitTemplate.convertAndSend(MqConstants.EXCHANGE_NAME, routingKey, event);
+            } catch (Exception e) {
+                log.warn("Failed to publish ticket status changed event", e);
+            }
         }
 
         return ticket;
