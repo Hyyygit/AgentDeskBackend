@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
  * @date 2026/4/29 23:45
  * @description 工单类别枚举
  */
-@RequiredArgsConstructor
 @Getter
 public enum TicketCategoryEnum {
     ACCOUNT_ACCESS(1, "账号访问"),
@@ -22,4 +21,9 @@ public enum TicketCategoryEnum {
 
     private final Integer category;
     private final String description;
+
+    TicketCategoryEnum(Integer category, String description) {
+        this.category = category;
+        this.description = description;
+    }
 }

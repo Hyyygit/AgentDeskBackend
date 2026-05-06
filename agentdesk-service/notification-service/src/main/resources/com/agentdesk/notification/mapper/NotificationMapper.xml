@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.agentdesk.notification.mapper.NotificationMapper">
+    <select id="selectByUserId" resultType="com.agentdesk.notification.domain.NotificationPO">
+        SELECT * FROM notification WHERE user_id = #{userId} AND deleted = 0 ORDER BY create_time DESC
+    </select>
+</mapper>

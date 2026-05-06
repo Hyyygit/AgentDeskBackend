@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
  * @date 2026/4/29 23:37
  * @description 工单状态枚举
  */
-@RequiredArgsConstructor
 @Getter
 public enum TicketStatusEnum {
     NEW(1, "新建"),
@@ -21,4 +20,9 @@ public enum TicketStatusEnum {
 
     private final int status;
     private final String description;
+
+    TicketStatusEnum(int status, String description) {
+        this.status = status;
+        this.description = description;
+    }
 }

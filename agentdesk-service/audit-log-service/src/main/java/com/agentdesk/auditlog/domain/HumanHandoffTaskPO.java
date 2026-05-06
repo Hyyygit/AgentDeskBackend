@@ -1,8 +1,10 @@
 package com.agentdesk.auditlog.domain;
 
 import com.agentdesk.common.core.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author hyyy
@@ -11,6 +13,8 @@ import lombok.Data;
  */
 @Schema(description = "人工转接任务信息持久化对象")
 @Data
+@EqualsAndHashCode(callSuper = true)
+@TableName("human_handoff_task")
 public class HumanHandoffTaskPO extends BaseEntity {
 
     @Schema(description = "本次请求的全局ID")

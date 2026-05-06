@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
  * @date 2026/5/3 18:59
  * @description 消息是由谁发出的枚举类
  */
-@RequiredArgsConstructor
 @Getter
 public enum MessageSourceTypeEnum {
     USER(1, "用户"),
@@ -18,4 +17,9 @@ public enum MessageSourceTypeEnum {
 
     private final int source;
     private final String description;
+
+    MessageSourceTypeEnum(int source, String description) {
+        this.source = source;
+        this.description = description;
+    }
 }

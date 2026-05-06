@@ -1,0 +1,84 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: false
+      routes:
+        # Auth/User Service
+        - id: user-service
+          uri: http://localhost:9001
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - StripPrefix=0
+        
+        # Conversation Service
+        - id: conversation-service
+          uri: http://localhost:9002
+          predicates:
+            - Path=/api/conversations/**
+          filters:
+            - StripPrefix=0
+        
+        # Ticket Service
+        - id: ticket-service
+          uri: http://localhost:9000
+          predicates:
+            - Path=/api/tickets/**
+          filters:
+            - StripPrefix=0
+        
+        # Knowledge Service
+        - id: knowledge-service
+          uri: http://localhost:9003
+          predicates:
+            - Path=/api/knowledge/**
+          filters:
+            - StripPrefix=0
+        
+        # Orchestrator Service
+        - id: orchestrator-service
+          uri: http://localhost:9005
+          predicates:
+            - Path=/api/orchestrator/**
+          filters:
+            - StripPrefix=0
+        
+        # Audit Service
+        - id: audit-log-service
+          uri: http://localhost:9004
+          predicates:
+            - Path=/api/audit/**,/api/log/**
+          filters:
+            - StripPrefix=0
+        
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: false
+
+jwt:
+  secret: YWdlbnRkZXNrLWludGVsbGlnZW50LXdvcmstb3JkZXItc3lzdGVtLXNlY3JldC1rZXktMjAyNg==
+  access-token-expiration: 1800000
+
+app:
+  security:
+    exclude-paths:
+      - /api/user/login
+      - /api/user/register
+      - /api/user/refresh
+      - /doc.html
+      - /webjars/**
+      - /v3/api-docs/**
+      - /swagger-resources/**

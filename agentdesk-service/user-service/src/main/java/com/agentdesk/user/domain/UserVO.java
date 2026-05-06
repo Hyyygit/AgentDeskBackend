@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @author hyyy
@@ -16,10 +17,15 @@ public class UserVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private String userNo;//用户编号
-    private String userName;//用户名
+    private Long id;
+    private String userNo;
+    private String userName;
+    private String realName;
     private String email;
+    private String phone;
     private String department;
+    private String roleCode;
     private Integer status;
-
+    private Long tenantId;
+    private Date createTime;
 }

@@ -1,10 +1,10 @@
 package com.agentdesk.knowledge.domain;
 
 import com.agentdesk.common.core.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-
-import java.time.LocalDateTime;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author hyyy
@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
  */
 @Schema(description = "知识文档持久化对象")
 @Data
+@EqualsAndHashCode(callSuper = true)
+@TableName("knowledge_doc")
 public class KnowledgeDocPO extends BaseEntity {
 
     @Schema(description = "文档编号")
@@ -41,9 +43,6 @@ public class KnowledgeDocPO extends BaseEntity {
 
     @Schema(description = "版本号")
     private Integer version;
-
-    @Schema(description = "逻辑删除")
-    private Boolean deleted;
 
     @Schema(description = "创建人")
     private Long createdBy;

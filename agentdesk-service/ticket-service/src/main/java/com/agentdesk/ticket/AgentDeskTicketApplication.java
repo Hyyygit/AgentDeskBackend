@@ -3,6 +3,8 @@ package com.agentdesk.ticket;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @author hyyy
@@ -10,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @description 工单服务启动类
  */
 @MapperScan("com.agentdesk.**.mapper")
+@ComponentScan(basePackages = "com.agentdesk")
+@EnableFeignClients(basePackages = "com.agentdesk")
 @SpringBootApplication
 public class AgentDeskTicketApplication {
     public static void main(String[] args) {

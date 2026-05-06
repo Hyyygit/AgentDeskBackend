@@ -1,14 +1,12 @@
 package com.agentdesk.auditlog.domain;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
+import com.agentdesk.common.core.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 /**
  * @author hyyy
@@ -17,13 +15,9 @@ import java.time.LocalDateTime;
  */
 @Schema(description = "Agent运行日志持久层对象")
 @Data
-public class AgentRunLogPO implements Serializable {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
-
-    @Schema(description = "主键ID")
-    private Long id;
+@EqualsAndHashCode(callSuper = true)
+@TableName("agent_run_log")
+public class AgentRunLogPO extends BaseEntity {
 
     @Schema(description = "本次请求的全局ID")
     private String requestId;
@@ -63,8 +57,4 @@ public class AgentRunLogPO implements Serializable {
 
     @Schema(description = "错误信息")
     private String errorMessage;
-
-    @Schema(description = "创建时间")
-    @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createdTime;
 }

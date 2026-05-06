@@ -8,37 +8,44 @@
         select t.id, t.ticket_no, t.ticket_category, t.priority, t.status,
         t.summary, t.description, t.source, t.assigned_group,
         t.assigned_user_id, t.dead_line, t.resolved_time, t.closed_time,
-        t.user_id, t.conversation_id, t.create_time, t.update_time from ticket t
+        t.user_id, t.conversation_id, t.create_time, t.update_time, t.tenant_id
+        from ticket t
     </sql>
     <select id="selectTicketList"
             resultType="com.agentdesk.ticket.domain.TicketPO"
             parameterType="com.agentdesk.ticket.domain.TicketQueryDTO">
         <include refid="selectTicketFrom"/>
         <where>
-            <if test="ticketCategory != null">and t.ticket_category =
-                #{ticketCategory}
-            </if>
+            <if test="ticketNo != null and ticketNo != ''">and t.ticket_no = #{ticketNo}</if>
+            <if test="ticketCategory != null">and t.ticket_category = #{ticketCategory}</if>
             <if test="priority != null">and t.priority = #{priority}</if>
             <if test="status != null">and t.status = #{status}</if>
             <if test="source != null">and t.source = #{source}</if>
-            <if test="assignedGroup != null and assignedGroup != ''">and
-                t.assigned_group = #{assignedGroup}
-            </if>
-            <if test="assignedUserId != null">and t.assigned_user_id =
-                #{assignedUserId}
-            </if>
+            <if test="assignedGroup != null and assignedGroup != ''">and t.assigned_group = #{assignedGroup}</if>
+            <if test="assignedUserId != null">and t.assigned_user_id = #{assignedUserId}</if>
             <if test="deadLine != null">and t.dead_line = #{deadLine}</if>
-            <if test="resolvedTime != null">and t.resolved_time =
-                #{resolvedTime}
-            </if>
+            <if test="resolvedTime != null">and t.resolved_time = #{resolvedTime}</if>
             <if test="closedTime != null">and t.closed_time = #{closedTime}</if>
-            <if test="userId != null">and t.user_id =
-                #{userId}
-            </if>
-            <if test="conversationId != null">and t.conversation_id =
-                #{conversationId}
-            </if>
+            <if test="userId != null">and t.user_id = #{userId}</if>
+            <if test="conversationId != null">and t.conversation_id = #{conversationId}</if>
+            <if test="createTimeStart != null">and t.create_time &gt;= #{createTimeStart}</if>
+            <if test="createTimeEnd != null">and t.create_time &lt;= #{createTimeEnd}</if>
             and deleted = 0
         </where>
+    </select>
+
+    <select id="selectByTicketNo" resultType="com.agentdesk.ticket.domain.TicketPO">
+        <include refid="selectTicketFrom"/>
+        where t.ticket_no = #{ticketNo} and deleted = 0
+    </select>
+
+    <select id="selectByUserId" resultType="com.agentdesk.ticket.domain.TicketPO">
+        <include refid="selectTicketFrom"/>
+        where t.user_id = #{userId} and deleted = 0
+        order by t.create_time desc
+    </select>
+
+    <select id="countByStatus" resultType="java.lang.Long">
+        select count(*) from ticket where status = #{status} and deleted = 0
     </select>
 </mapper>

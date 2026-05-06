@@ -4,6 +4,7 @@ import com.agentdesk.ticket.domain.TicketQueryDTO;
 import com.agentdesk.ticket.domain.TicketPO;
 import com.agentdesk.ticket.domain.TicketVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -14,4 +15,10 @@ import java.util.List;
  */
 public interface TicketMapper extends BaseMapper<TicketPO> {
     List<TicketPO> selectTicketList(TicketQueryDTO ticketQueryDTO);
+
+    TicketPO selectByTicketNo(@Param("ticketNo") String ticketNo);
+
+    List<TicketPO> selectByUserId(@Param("userId") Long userId);
+
+    Long countByStatus(@Param("status") Integer status);
 }

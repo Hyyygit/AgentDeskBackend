@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
  * @date 2026/5/3 19:25
  * @description 转给人工处理的类型枚举
  */
-@RequiredArgsConstructor
 @Getter
 public enum HumanHandoffTypeEnum {
     LOW_CONFIDENCE(1, "置信度过低"),
@@ -17,4 +16,9 @@ public enum HumanHandoffTypeEnum {
 
     private final int type;
     private final String description;
+
+    HumanHandoffTypeEnum(int type, String description) {
+        this.type = type;
+        this.description = description;
+    }
 }

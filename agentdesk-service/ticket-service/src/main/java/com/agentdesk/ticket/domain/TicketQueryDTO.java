@@ -20,32 +20,24 @@ public class TicketQueryDTO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Schema(description = "工单类型")
-    private Integer ticketCategory;//工单类型
-    @Schema(description = "工单优先级")
-    private Integer priority;//工单优先级
-    @Schema(description = "工单状态")
-    private Integer status;//工单状态
-    @Schema(description = "工单来源")
-    private Integer source;//工单来源
-    @Schema(description = "工单分配的组")
-    private String assignedGroup;//工单分配的组
-    @Schema(description = "工单分配的处理人ID")
-    private Integer assignedUserId;//工单分配的处理人ID
-    @Schema(description = "处理工单的预期截止时间")
-    private Date deadLine;//处理工单的预期截止时间
-    @Schema(description = "工单解决时间")
-    private Date resolvedTime;//工单解决时间
-    @Schema(description = "工单关闭时间")
-    private Date closedTime;//工单关闭时间
-    @Schema(description = "提单的用户主键ID")
-    private Integer userId;//提单的用户主键ID
-    @Schema(description = "工单类型")
-    private Integer conversationId;//关联的会话ID
-    @Schema(description = "工单创建时间")
+    private Integer pageNum;
+    private Integer pageSize;
+
+    private String ticketNo;
+    private Integer ticketCategory;
+    private Integer priority;
+    private Integer status;
+    private Integer source;
+    private String assignedGroup;
+    private Long assignedUserId;
+    private Date deadLine;
+    private Date resolvedTime;
+    private Date closedTime;
+    private Long userId;
+    private Long conversationId;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;
-    @Schema(description = "工单更新时间")
+    private Date createTimeStart;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
+    private Date createTimeEnd;
 }

@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
  * @date 2026/5/3 19:16
  * @description 工单操作类型枚举类
  */
-@RequiredArgsConstructor
 @Getter
 public enum TicketActionTypeEnum {
     CREATE(1, "创建"),
@@ -21,4 +20,9 @@ public enum TicketActionTypeEnum {
 
     private final int type;
     private final String description;
+
+    TicketActionTypeEnum(int type, String description) {
+        this.type = type;
+        this.description = description;
+    }
 }

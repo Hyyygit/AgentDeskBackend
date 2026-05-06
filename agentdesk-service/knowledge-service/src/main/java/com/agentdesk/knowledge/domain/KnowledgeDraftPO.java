@@ -1,8 +1,11 @@
 package com.agentdesk.knowledge.domain;
 
 import com.agentdesk.common.core.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
 
@@ -13,10 +16,13 @@ import java.math.BigDecimal;
  */
 @Schema(description = "知识草稿持久化对象")
 @Data
+@EqualsAndHashCode(callSuper = true)
+@TableName("knowledge_draft")
 public class KnowledgeDraftPO extends BaseEntity {
 
     @Schema(description = "来源工单ID")
-    private Long ticketId;
+    @TableField("source_ticket_id")
+    private Long sourceTicketId;
 
     @Schema(description = "草稿标题")
     private String title;

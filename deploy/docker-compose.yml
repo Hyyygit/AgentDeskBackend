@@ -1,0 +1,145 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: agentdesk-mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 123456
+      MYSQL_CHARACTER_SET_SERVER: utf8mb4
+      MYSQL_COLLATION_SERVER: utf8mb4_unicode_ci
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ../datasource/mysql/建表语句.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: agentdesk-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      timeout: 5s
+      retries: 5
+
+  gateway-service:
+    build:
+      context: ..
+      dockerfile: agentdesk-service/gateway-service/Dockerfile
+    container_name: agentdesk-gateway
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  user-service:
+    build:
+      context: ..
+      dockerfile: agentdesk-service/user-service/Dockerfile
+    container_name: agentdesk-user
+    ports:
+      - "9001:9001"
+    depends_on:
+      - mysql
+      - redis
+
+  conversation-service:
+    build:
+      context: ..
+      dockerfile: agentdesk-service/conversation-service/Dockerfile
+    container_name: agentdesk-conversation
+    ports:
+      - "9002:9002"
+    depends_on:
+      - mysql
+      - redis
+
+  ticket-service:
+    build:
+      context: ..
+      dockerfile: agentdesk-service/ticket-service/Dockerfile
+    container_name: agentdesk-ticket
+    ports:
+      - "9000:9000"
+    depends_on:
+      - mysql
+      - redis
+
+  knowledge-service:
+    build:
+      context: ..
+      dockerfile: agentdesk-service/knowledge-service/Dockerfile
+    container_name: agentdesk-knowledge
+    ports:
+      - "9003:9003"
+    depends_on:
+      - mysql
+      - redis
+
+  orchestrator-service:
+    build:
+      context: ..
+      dockerfile: agentdesk-service/agent-orchestrator-service/Dockerfile
+    container_name: agentdesk-orchestrator
+    ports:
+      - "9005:9005"
+    depends_on:
+      - mysql
+      - redis
+
+  audit-log-service:
+    build:
+      context: ..
+      dockerfile: agentdesk-service/audit-log-service/Dockerfile
+    container_name: agentdesk-audit
+    ports:
+      - "9004:9004"
+    depends_on:
+      - mysql
+
+  notification-service:
+    build:
+      context: ..
+      dockerfile: agentdesk-service/notification-service/Dockerfile
+    container_name: agentdesk-notification
+    ports:
+      - "9006:9006"
+    depends_on:
+      - mysql
+
+  ops-admin-service:
+    build:
+      context: ..
+      dockerfile: agentdesk-service/ops-admin-service/Dockerfile
+    container_name: agentdesk-admin
+    ports:
+      - "9007:9007"
+    depends_on:
+      - mysql
+
+  frontend:
+    build:
+      context: ../agentdesk-frontend
+      dockerfile: Dockerfile
+    container_name: agentdesk-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - gateway-service
+
+volumes:
+  mysql-data:
+  redis-data:

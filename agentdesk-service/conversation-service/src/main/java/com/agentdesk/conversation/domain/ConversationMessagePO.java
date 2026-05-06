@@ -1,6 +1,7 @@
 package com.agentdesk.conversation.domain;
 
 import com.agentdesk.common.core.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -10,6 +11,7 @@ import lombok.Data;
  * @description 会话消息持久化对象
  */
 @Data
+@TableName("conversation_message")
 public class ConversationMessagePO extends BaseEntity {
 
     @Schema(description = "消息所属的会话的主键id")
@@ -19,10 +21,10 @@ public class ConversationMessagePO extends BaseEntity {
     private String requestId;
 
     @Schema(description = "发送这条消息的人的主键id")
-    private Long sendId;
+    private Long senderId;
 
     @Schema(description = "这条消息是谁发出的")
-    private Integer sendType;
+    private Integer senderType;
 
     @Schema(description = "消息的类型")
     private Integer messageType;

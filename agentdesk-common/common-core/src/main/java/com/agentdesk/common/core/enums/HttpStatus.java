@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
  * @date 2026/5/1 20:12
  * @description Http状态码枚举
  */
-@RequiredArgsConstructor
 @Getter
 public enum HttpStatus {
     OK(200, "操作成功"),
@@ -31,4 +30,9 @@ public enum HttpStatus {
 
     private final int code;
     private final String message;
+
+    HttpStatus(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 }

@@ -18,27 +18,27 @@ public class TicketVO implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private Integer id;//工单主键ID
+    private Long id;
+    private Long tenantId;
+    private String ticketNo;
+    private Long userId;
+    private Long conversationId;
+    private Integer ticketCategory;
+    private Integer priority;
+    private Integer status;
+    private Integer source;
+    private String summary;
+    private String description;
+    private String assignedGroup;
+    private Long assignedUserId;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date createTime;//工单创建时间
+    private Date deadLine;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;//工单更新时间
-
-    private String ticketNo;//工单编号
-    private Integer ticketCategory;//工单类型
-    private Integer priority;//工单优先级
-    private Integer status;//工单状态
-    private String summary;//工单摘要
-    private String description;//工单详细描述
-    private Integer source;//工单来源
-    private String assignedGroup;//工单分配的组
-    private Integer assignedUserId;//工单分配的处理人ID
+    private Date resolvedTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date deadLine;//处理工单的预期截止时间
+    private Date closedTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date resolvedTime;//工单解决时间
+    private Date createTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date closedTime;//工单关闭时间
-    private Integer userId;//提单的用户主键ID
-    private Integer conversationId;//关联的会话ID
+    private Date updateTime;
 }

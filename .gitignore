@@ -38,3 +38,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Frontend ###
+agentdesk-frontend/dist/
+agentdesk-frontend/node_modules/
+agentdesk-frontend/.env.local
+agentdesk-frontend/.env.*.local

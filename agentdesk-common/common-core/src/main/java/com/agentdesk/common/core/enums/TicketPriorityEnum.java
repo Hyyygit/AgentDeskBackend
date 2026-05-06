@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
  * @date 2026/4/29 23:42
  * @description 工单优先级枚举
  */
-@RequiredArgsConstructor
 @Getter
 public enum TicketPriorityEnum {
     P1(1, "紧急"),
@@ -18,4 +17,9 @@ public enum TicketPriorityEnum {
 
     private final Integer level;
     private final String description;
+
+    TicketPriorityEnum(Integer level, String description) {
+        this.level = level;
+        this.description = description;
+    }
 }

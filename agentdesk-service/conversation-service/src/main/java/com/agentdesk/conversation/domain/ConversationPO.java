@@ -1,6 +1,7 @@
 package com.agentdesk.conversation.domain;
 
 import com.agentdesk.common.core.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ import java.time.LocalDateTime;
  * @description 会话持久化对象
  */
 @Data
+@TableName("conversation")
 public class ConversationPO extends BaseEntity {
 
     @Schema(description = "会话编号")

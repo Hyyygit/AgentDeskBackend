@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
  * @date 2026/4/29 23:34
  * @description 错误码枚举
  */
-@RequiredArgsConstructor
 @Getter
 public enum ErrorCodeEnum {
     SUCCESS(200, "操作成功"),
@@ -21,4 +20,9 @@ public enum ErrorCodeEnum {
 
     private final int code;
     private final String message;
+
+    ErrorCodeEnum(int code, String message) {
+        this.code = code;
+        this.message = message;
+    }
 }
