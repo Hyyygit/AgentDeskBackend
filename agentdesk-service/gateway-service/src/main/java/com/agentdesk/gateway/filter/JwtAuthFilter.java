@@ -1,9 +1,11 @@
 package com.agentdesk.gateway.filter;
 
+import com.agentdesk.gateway.config.properties.SecurityProperties;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -15,16 +17,15 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 import javax.crypto.SecretKey;
-import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAuthFilter implements GlobalFilter, Ordered {
 
     @Value("${jwt.secret}")
     private String secret;
 
-    @Value("${app.security.exclude-paths}")
-    private List<String> excludePaths;
+    private final SecurityProperties securityProperties;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -60,7 +61,9 @@ public class JwtAuthFilter implements GlobalFilter, Ordered {
     }
 
     private boolean isExcluded(String path) {
-        return excludePaths.stream().anyMatch(p -> pathMatcher(p, path));
+        return securityProperties.getExcludePaths()
+                .stream()
+                .anyMatch(pattern -> pathMatcher(pattern, path));
     }
 
     private boolean pathMatcher(String pattern, String path) {

@@ -18,11 +18,11 @@
     </properties>
 
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>com.agentdesk</groupId>
             <artifactId>common-core</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>com.agentdesk</groupId>
@@ -30,11 +30,11 @@
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <dependency>
+        <!--<dependency>
             <groupId>com.agentdesk</groupId>
             <artifactId>common-security</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
+        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -44,6 +44,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
         </dependency>
 
         <dependency>
