@@ -51,4 +51,14 @@ public class RabbitMqConfig {
     public Binding draftBinding() {
         return BindingBuilder.bind(draftQueue()).to(agentDeskExchange()).with("knowledge.draft.#");
     }
+
+    @Bean
+    public Queue notificationQueue() {
+        return new Queue(MqConstants.QUEUE_NOTIFICATION, true);
+    }
+
+    @Bean
+    public Binding notificationBinding() {
+        return BindingBuilder.bind(notificationQueue()).to(agentDeskExchange()).with("ticket.#");
+    }
 }
