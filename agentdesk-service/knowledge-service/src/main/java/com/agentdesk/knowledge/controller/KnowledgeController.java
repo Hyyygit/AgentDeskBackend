@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
  */
 @Tag(name = "RAG知识管理")
 @RestController
-@RequestMapping("/api/knowledge")
+@RequestMapping("/knowledge")
 @RequiredArgsConstructor
 public class KnowledgeController extends BaseController {
 

@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @Tag(name = "用户认证")
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class AuthController extends BaseController {
 
     @Autowired

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Tag(name = "会话消息管理")
 @RestController
-@RequestMapping("/api/conversations")
+@RequestMapping("/conversations")
 public class ConversationMessageController extends BaseController {
 
     @Autowired

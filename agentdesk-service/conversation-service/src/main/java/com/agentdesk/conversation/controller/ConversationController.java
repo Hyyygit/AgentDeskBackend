@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  */
 @Tag(name = "会话管理")
 @RestController
-@RequestMapping("/api/conversations")
+@RequestMapping("/conversations")
 public class ConversationController extends BaseController {
 
     @Autowired

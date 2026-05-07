@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  */
 @Tag(name = "工单管理")
 @RestController
-@RequestMapping("/api/tickets")
+@RequestMapping("/tickets")
 @RequiredArgsConstructor
 public class TicketController extends BaseController {
 

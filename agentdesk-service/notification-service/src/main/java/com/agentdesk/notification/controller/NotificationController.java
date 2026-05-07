@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Tag(name = "通知管理")
 @RestController
-@RequestMapping("/api/notifications")
+@RequestMapping("/notifications")
 @RequiredArgsConstructor
 public class NotificationController extends BaseController {
 

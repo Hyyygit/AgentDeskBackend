@@ -12,7 +12,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/admin/config")
+@RequestMapping("/admin/config")
 public class SystemConfigController extends BaseController {
 
     @GetMapping("/")

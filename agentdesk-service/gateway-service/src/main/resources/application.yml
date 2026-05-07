@@ -30,7 +30,7 @@ spring:
               predicates:
                 - Path=/api/user/**
               filters:
-                - StripPrefix=0
+                - StripPrefix=1
 
             # Conversation Service
             - id: conversation-service
@@ -38,7 +38,7 @@ spring:
               predicates:
                 - Path=/api/conversations/**
               filters:
-                - StripPrefix=0
+                - StripPrefix=1
 
             # Ticket Service
             - id: ticket-service
@@ -46,7 +46,7 @@ spring:
               predicates:
                 - Path=/api/tickets/**
               filters:
-                - StripPrefix=0
+                - StripPrefix=1
 
             # Knowledge Service
             - id: knowledge-service
@@ -54,7 +54,7 @@ spring:
               predicates:
                 - Path=/api/knowledge/**
               filters:
-                - StripPrefix=0
+                - StripPrefix=1
 
             # Orchestrator Service
             - id: orchestrator-service
@@ -62,7 +62,7 @@ spring:
               predicates:
                 - Path=/api/orchestrator/**
               filters:
-                - StripPrefix=0
+                - StripPrefix=1
 
             # Audit Service
             - id: audit-log-service
@@ -70,7 +70,7 @@ spring:
               predicates:
                 - Path=/api/audit/**,/api/log/**
               filters:
-                - StripPrefix=0
+                - StripPrefix=1
 
           default-filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin

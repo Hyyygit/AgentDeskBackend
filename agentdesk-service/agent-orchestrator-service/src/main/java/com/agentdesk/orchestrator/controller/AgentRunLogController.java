@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/orchestrator")
+@RequestMapping("/orchestrator")
 public class AgentRunLogController extends BaseController {
 
     @Autowired

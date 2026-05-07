@@ -13,7 +13,7 @@ import java.util.List;
 
 @Tag(name = "日志控制类")
 @RestController
-@RequestMapping("/api/log")
+@RequestMapping("/log")
 @RequiredArgsConstructor
 public class LogController extends BaseController {
 

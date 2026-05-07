@@ -17,7 +17,7 @@ import java.util.List;
 
 @Tag(name = "审计控制类")
 @RestController
-@RequestMapping("/api/audit")
+@RequestMapping("/audit")
 @RequiredArgsConstructor
 public class AuditController extends BaseController {
 
