@@ -141,11 +141,13 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
 
     @Override
     public void sendStreamMessage(Long conversationId, String content, SseEmitter emitter) {
+        // Capture userId on the request thread BEFORE entering the async executor
+        Long userId = UserContext.getCurrentUserId();
+
         streamExecutor.submit(() -> {
             String agentContent = null;
             String requestId = IdUtil.fastSimpleUUID();
             try {
-                Long userId = UserContext.getCurrentUserId();
 
                 ConversationMessagePO userMessage = new ConversationMessagePO();
                 userMessage.setConversationId(conversationId);
