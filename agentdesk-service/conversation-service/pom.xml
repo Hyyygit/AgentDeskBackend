@@ -50,6 +50,12 @@
 
         <dependency>
             <groupId>com.agentdesk</groupId>
+            <artifactId>common-mybatis</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.agentdesk</groupId>
             <artifactId>api-conversation</artifactId>
         </dependency>
 

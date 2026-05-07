@@ -1,5 +1,6 @@
 package com.agentdesk.common.security.filter;
 
+import com.agentdesk.common.security.context.UserContext;
 import com.agentdesk.common.security.domain.AuthUser;
 import com.agentdesk.common.security.utils.JwtUtils;
 import io.jsonwebtoken.Claims;
@@ -42,6 +43,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 authUser.setUserId(claims.get("userId", Long.class));
                 authUser.setUsername(claims.get("username", String.class));
                 authUser.setRoleCode(claims.get("roleCode", String.class));
+                authUser.setTenantId(claims.get("tenantId", Long.class));
 
                 List<SimpleGrantedAuthority> authorities = Collections.singletonList(
                         new SimpleGrantedAuthority(authUser.getRoleCode())
@@ -51,13 +53,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         new UsernamePasswordAuthenticationToken(authUser, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
 
+                UserContext.setCurrentUser(authUser);
+
                 request.setAttribute("currentUser", authUser);
             } catch (Exception e) {
                 log.warn("Failed to set user authentication: {}", e.getMessage());
             }
         }
 
-        filterChain.doFilter(request, response);
+        try {
+            filterChain.doFilter(request, response);
+        } finally {
+            UserContext.clear();
+        }
     }
 
     private String extractToken(HttpServletRequest request) {

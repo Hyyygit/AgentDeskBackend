@@ -40,8 +40,8 @@ public class KnowledgeAgent extends AbstractAgent {
                     .map(d -> d.getTitle() + ": " + d.getContent())
                     .collect(Collectors.joining("\n\n"));
 
-                String systemPrompt = "Extract the most relevant answer from the knowledge documents for the user's question. Be concise.";
-                String userPrompt = "User question: " + userMessage + "\n\nKnowledge documents:\n" + docsText + "\n\nBest answer:";
+                String systemPrompt = "从知识库文档中提取与用户问题最相关的答案。请简洁明了。";
+                String userPrompt = "用户问题: " + userMessage + "\n\n知识库文档:\n" + docsText + "\n\n最佳答案:";
                 result.setBestAnswer(callLLM(systemPrompt, userPrompt));
             }
 

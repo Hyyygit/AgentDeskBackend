@@ -48,14 +48,14 @@ public class KnowledgeCuratorAgent extends AbstractAgent {
 
     public void generateDraft(Long ticketId, String ticketSummary, String ticketDescription, String resolution) {
         String systemPrompt = """
-            You are a Knowledge Curator Agent. Based on the resolved ticket, generate a knowledge base draft.
-            Create a title, category, and detailed content for future reference.
-            Return JSON: {"title": "...", "category": "...", "tags": "...", "content": "...", "confidence": 0.0}
+            你是一个知识沉淀Agent。根据已解决的工单，生成一篇知识库草稿。
+            创建标题、分类和详细内容，供将来参考。
+            返回JSON: {"title": "...", "category": "...", "tags": "...", "content": "...", "confidence": 0.0}
             """;
 
-        String userPrompt = "Ticket summary: " + ticketSummary + "\n"
-            + "Description: " + ticketDescription + "\n"
-            + "Resolution: " + resolution;
+        String userPrompt = "工单摘要: " + ticketSummary + "\n"
+            + "问题描述: " + ticketDescription + "\n"
+            + "解决方案: " + resolution;
 
         try {
             String response = callLLM(systemPrompt, userPrompt);

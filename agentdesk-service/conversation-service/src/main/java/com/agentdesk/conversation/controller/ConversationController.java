@@ -10,6 +10,7 @@ import com.agentdesk.conversation.service.IConversationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
  * @date 2026/5/3 14:58
  * @description 会话管理器
  */
+@Slf4j
 @Tag(name = "会话管理")
 @RestController
 @RequestMapping("/conversations")
@@ -86,6 +88,19 @@ public class ConversationController extends BaseController {
     @GetMapping(value = "/messages/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamMessages(@RequestParam Long conversationId, @RequestParam String content) {
         SseEmitter emitter = new SseEmitter(300000L);
+        /*emitter.onTimeout(() -> {
+            log.warn("SSE timeout for conversationId={}", conversationId);
+            emitter.complete();
+        });
+
+        emitter.onError((ex) -> {
+            log.error("SSE error for conversationId={}", conversationId, ex);
+            emitter.completeWithError(ex);
+        });
+
+        emitter.onCompletion(() -> {
+            log.info("SSE completed for conversationId={}", conversationId);
+        });*/
         conversationService.sendStreamMessage(conversationId, content, emitter);
         return emitter;
     }

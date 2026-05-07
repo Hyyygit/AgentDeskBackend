@@ -35,21 +35,21 @@ public class AgentTraceRecorder {
                        Double confidence, String gateResult, Integer latencyMs) {
         agentRunLogService.saveLog(requestId, agentName, input, output, confidence, gateResult, latencyMs, null);
         log.info("[{}] Agent '{}' completed in {}ms, gate: {}, confidence: {}",
-                 requestId, agentName, latencyMs, gateResult, confidence);
+                requestId, agentName, latencyMs, gateResult, confidence);
 
         if (rabbitTemplate != null) {
             try {
                 AgentRunEvent event = AgentRunEvent.builder()
-                    .requestId(requestId)
-                    .agentName(agentName)
-                    .runStatus("SUCCESS")
-                    .inputPayload(toJson(input))
-                    .outputPayload(toJson(output))
-                    .confidence(confidence != null ? BigDecimal.valueOf(confidence) : null)
-                    .gateResult(gateResult)
-                    .latencyMs(latencyMs)
-                    .timestamp(LocalDateTime.now())
-                    .build();
+                        .requestId(requestId)
+                        .agentName(agentName)
+                        .runStatus("SUCCESS")
+                        .inputPayload(toJson(input))
+                        .outputPayload(toJson(output))
+                        .confidence(confidence != null ? BigDecimal.valueOf(confidence) : null)
+                        .gateResult(gateResult)
+                        .latencyMs(latencyMs)
+                        .timestamp(LocalDateTime.now())
+                        .build();
                 rabbitTemplate.convertAndSend(MqConstants.EXCHANGE_NAME, MqConstants.KEY_AGENT_RUN, event);
             } catch (Exception e) {
                 log.warn("Failed to publish agent run event", e);
@@ -64,14 +64,14 @@ public class AgentTraceRecorder {
         if (rabbitTemplate != null) {
             try {
                 AgentRunEvent event = AgentRunEvent.builder()
-                    .requestId(requestId)
-                    .agentName(agentName)
-                    .runStatus("FAILED")
-                    .gateResult("BLOCKED")
-                    .latencyMs((int) latencyMs)
-                    .errorMessage(errorMessage)
-                    .timestamp(LocalDateTime.now())
-                    .build();
+                        .requestId(requestId)
+                        .agentName(agentName)
+                        .runStatus("FAILED")
+                        .gateResult("BLOCKED")
+                        .latencyMs((int) latencyMs)
+                        .errorMessage(errorMessage)
+                        .timestamp(LocalDateTime.now())
+                        .build();
                 rabbitTemplate.convertAndSend(MqConstants.EXCHANGE_NAME, MqConstants.KEY_AGENT_RUN, event);
             } catch (Exception e) {
                 log.warn("Failed to publish agent run error event", e);
@@ -81,11 +81,23 @@ public class AgentTraceRecorder {
 
     private String toJson(Object obj) {
         if (obj == null) return null;
-        if (obj instanceof String) return (String) obj;
+
         try {
+            if (obj instanceof String str) {
+                if (str.isEmpty()) return null;
+
+                try {
+                    objectMapper.readTree(str);
+                    return str;
+                } catch (Exception e) {
+                    return objectMapper.writeValueAsString(str);
+                }
+            }
+
             return objectMapper.writeValueAsString(obj);
         } catch (JsonProcessingException e) {
-            return obj.toString();
+            log.warn("Failed to serialize object to JSON: {}", obj.getClass().getName(), e);
+            return "null";
         }
     }
 }

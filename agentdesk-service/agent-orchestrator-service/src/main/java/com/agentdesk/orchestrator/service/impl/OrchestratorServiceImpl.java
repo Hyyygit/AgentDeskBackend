@@ -8,10 +8,10 @@ import com.agentdesk.orchestrator.service.OrchestratorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -56,13 +56,24 @@ public class OrchestratorServiceImpl implements OrchestratorService {
 
         executorService.submit(() -> {
             try {
-                OrchestrateResponse response = orchestrate(request);
-                emitter.send(SseEmitter.event()
-                    .name("result")
-                    .data(response, MediaType.APPLICATION_JSON));
+                coordinatorAgent.orchestrateStream(request, chunk -> {
+                    try {
+                        String trimmed = chunk.trim();
+                        if ("[DONE]".equals(trimmed)) {
+                            emitter.send(SseEmitter.event().name("done").data("[DONE]"));
+                        } else {
+                            emitter.send(SseEmitter.event().data(chunk));
+                        }
+                    } catch (IOException e) {
+                        log.error("SSE send failed", e);
+                    }
+                });
                 emitter.complete();
             } catch (Exception e) {
-                log.error("SSE stream failed", e);
+                log.error("SSE orchestrator stream failed", e);
+                try {
+                    emitter.send(SseEmitter.event().name("error").data(e.getMessage()));
+                } catch (IOException ignored) {}
                 emitter.completeWithError(e);
             }
         });

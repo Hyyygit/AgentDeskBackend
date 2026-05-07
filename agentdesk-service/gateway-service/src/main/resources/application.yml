@@ -72,6 +72,22 @@ spring:
               filters:
                 - StripPrefix=1
 
+            # Notification Service
+            - id: notification-service
+              uri: lb://notification-service
+              predicates:
+                - Path=/api/notifications/**
+              filters:
+                - StripPrefix=1
+
+            # Ops-admin Service
+            - id: ops-admin-service
+              uri: lb://ops-admin-service
+              predicates:
+                - Path=/api/admin/**
+              filters:
+                - StripPrefix=1
+
           default-filters:
             - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
           globalcors:

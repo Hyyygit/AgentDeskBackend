@@ -20,7 +20,7 @@ public class DecisionAgent extends AbstractAgent {
         if (triageResult.getIsSensitive() != null && triageResult.getIsSensitive()) {
             DecisionResult result = new DecisionResult();
             result.setAction("HUMAN_HANDOFF");
-            result.setReason("Sensitive content detected");
+            result.setReason("检测到敏感内容");
             result.setConfidence(1.0);
             return result;
         }
@@ -28,7 +28,7 @@ public class DecisionAgent extends AbstractAgent {
         if (triageResult.getConfidence() != null && triageResult.getConfidence() < 0.6) {
             DecisionResult result = new DecisionResult();
             result.setAction("HUMAN_HANDOFF");
-            result.setReason("Low triage confidence: " + triageResult.getConfidence());
+            result.setReason("分诊置信度过低: " + triageResult.getConfidence());
             result.setConfidence(triageResult.getConfidence());
             return result;
         }
@@ -36,31 +36,31 @@ public class DecisionAgent extends AbstractAgent {
         if (knowledgeResult.getHasAnswer() && knowledgeResult.getRelevanceScore() > 0.7) {
             DecisionResult result = new DecisionResult();
             result.setAction("AUTO_RESOLVE");
-            result.setReason("Knowledge base has relevant answer");
+            result.setReason("知识库中找到了相关答案");
             result.setSuggestedResponse(knowledgeResult.getBestAnswer());
             result.setConfidence(knowledgeResult.getRelevanceScore());
             return result;
         }
 
         String systemPrompt = """
-            You are a Decision Agent. Based on the triage and knowledge results, decide the action:
-            - AUTO_RESOLVE: If knowledge base has a good answer
-            - CREATE_TICKET: If a formal ticket is needed
-            - HUMAN_HANDOFF: If the issue requires human intervention
+            你是一个决策Agent。根据分诊结果和知识库检索结果，决定下一步行动：
+            - AUTO_RESOLVE: 知识库有合适的答案，可以直接回复用户
+            - CREATE_TICKET: 需要创建正式工单进行跟踪处理
+            - HUMAN_HANDOFF: 问题复杂或敏感，需要转人工处理
 
-            Return ONLY JSON: {"action": "...", "reason": "...", "suggestedResponse": "...", "confidence": 0.0}
+            只返回JSON: {"action": "...", "reason": "...", "suggestedResponse": "...", "confidence": 0.0}
             """;
 
         try {
-            String context = "Triage: " + triageResult.getCategory() + " " + triageResult.getPriority() + "\n"
-                + "Knowledge: " + (knowledgeResult.getHasAnswer() ? "Found relevant docs" : "No relevant docs");
+            String context = "分诊结果: " + triageResult.getCategory() + " " + triageResult.getPriority() + "\n"
+                + "知识库: " + (knowledgeResult.getHasAnswer() ? "找到相关文档" : "未找到相关文档");
             String response = callLLM(systemPrompt, context);
             return mapper.readValue(response, DecisionResult.class);
         } catch (Exception e) {
             log.error("Decision failed, using fallback", e);
             DecisionResult fallback = new DecisionResult();
             fallback.setAction("CREATE_TICKET");
-            fallback.setReason("Fallback decision due to error: " + e.getMessage());
+            fallback.setReason("决策出错，使用降级方案: " + e.getMessage());
             fallback.setConfidence(0.5);
             return fallback;
         }

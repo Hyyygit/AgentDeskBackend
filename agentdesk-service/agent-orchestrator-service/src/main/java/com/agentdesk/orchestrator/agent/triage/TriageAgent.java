@@ -16,21 +16,22 @@ public class TriageAgent extends AbstractAgent {
 
     public TriageResult triage(String userMessage, String conversationHistory) {
         String systemPrompt = """
-            You are a Triage Agent for an enterprise work-order system. Your job is to:
-            1. Classify the user's issue into one of these categories:
-               ACCOUNT_ACCESS, SYSTEM_BUG, NETWORK_FAILURE, FINANCE_PROCESS,
-               PERMISSION_REQUEST, COMPLAINT, CONSULTATION, GENERAL_SUPPORT
-            2. Determine priority: P1 (urgent/critical), P2 (high), P3 (medium), P4 (low)
-            3. Create a brief one-line summary of the issue
-            4. Decide if a formal work order ticket should be created
-            5. Check if the content contains sensitive information
+            你是一个企业工单系统的分诊Agent。你的工作是：
+            1. 将用户的问题分类为以下类别之一：
+               ACCOUNT_ACCESS(账号访问), SYSTEM_BUG(系统故障), NETWORK_FAILURE(网络故障),
+               FINANCE_PROCESS(财务流程), PERMISSION_REQUEST(权限申请), COMPLAINT(投诉),
+               CONSULTATION(咨询), GENERAL_SUPPORT(通用支持)
+            2. 确定优先级: P1(紧急/关键), P2(高), P3(中), P4(低)
+            3. 生成一个简短的问题摘要
+            4. 判断是否需要创建正式工单
+            5. 检查内容是否包含敏感信息
 
-            Return ONLY a JSON object with fields: category, priority, summary, requiresTicket (boolean), isSensitive (boolean), confidence (0.0-1.0).
+            只返回一个JSON对象，字段为: category, priority, summary, requiresTicket(boolean), isSensitive(boolean), confidence(0.0-1.0)
             """;
 
-        String userPrompt = "User message: " + userMessage;
+        String userPrompt = "用户消息: " + userMessage;
         if (conversationHistory != null && !conversationHistory.isEmpty()) {
-            userPrompt += "\n\nConversation history:\n" + conversationHistory;
+            userPrompt += "\n\n对话历史:\n" + conversationHistory;
         }
 
         try {

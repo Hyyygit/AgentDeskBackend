@@ -5,26 +5,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.agentdesk</groupId>
-        <artifactId>AgentDeskBackend</artifactId>
+        <artifactId>agentdesk-common</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>agentdesk-common</artifactId>
-    <packaging>pom</packaging>
-    <modules>
-        <module>common-core</module>
-        <module>common-web</module>
-        <module>common-mybatis</module>
-        <module>common-redis</module>
-        <module>common-feign</module>
-        <module>common-security</module>
-        <module>common-ai</module>
-        <module>common-rag</module>
-        <module>common-tool</module>
-        <module>common-log</module>
-        <module>common-test</module>
-        <module>common-rabbitmq</module>
-    </modules>
+    <artifactId>common-rabbitmq</artifactId>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -32,4 +17,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
+        </dependency>
+    </dependencies>
 </project>

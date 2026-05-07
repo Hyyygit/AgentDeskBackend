@@ -1,6 +1,7 @@
 package com.agentdesk.auditlog.domain;
 
 import com.agentdesk.common.core.entity.BaseEntity;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -18,6 +19,9 @@ import java.math.BigDecimal;
 @EqualsAndHashCode(callSuper = true)
 @TableName("agent_run_log")
 public class AgentRunLogPO extends BaseEntity {
+
+    @TableField(exist = false)
+    private Long tenantId;
 
     @Schema(description = "本次请求的全局ID")
     private String requestId;
