@@ -24,6 +24,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webflux</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.agentdesk</groupId>
             <artifactId>common-core</artifactId>
         </dependency>

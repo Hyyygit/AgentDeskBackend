@@ -14,21 +14,17 @@ import com.agentdesk.conversation.mapper.ConversationMapper;
 import com.agentdesk.conversation.mapper.ConversationMessageMapper;
 import com.agentdesk.conversation.service.IConversationService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -43,7 +39,6 @@ import java.util.concurrent.Executors;
 public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, ConversationPO> implements IConversationService {
 
     private static final Logger log = LoggerFactory.getLogger(ConversationServiceImpl.class);
-    private static final ObjectMapper objectMapper = new ObjectMapper();
     private final ExecutorService streamExecutor = Executors.newCachedThreadPool();
 
     @Value("${orchestrator.url:http://localhost:9005}")
@@ -167,38 +162,35 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
                 orchRequest.setUserId(userId);
                 orchRequest.setRequestId(requestId);
 
-                RestTemplate restTemplate = new RestTemplate();
-                SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-                factory.setBufferRequestBody(false);
-                factory.setConnectTimeout(300000);
-                factory.setReadTimeout(300000);
-                restTemplate.setRequestFactory(factory);
+                WebClient webClient = WebClient.builder()
+                    .baseUrl(orchestratorUrl)
+                    .build();
 
-                String streamUrl = orchestratorUrl + "/internal/agent/orchestrate/stream";
                 StringBuilder agentContentBuilder = new StringBuilder();
 
-                restTemplate.execute(streamUrl, HttpMethod.POST,
-                    req -> {
-                        req.getHeaders().setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
-                        req.getBody().write(objectMapper.writeValueAsBytes(orchRequest));
-                    },
-                    res -> {
-                        BufferedReader reader = new BufferedReader(
-                            new InputStreamReader(res.getBody(), StandardCharsets.UTF_8));
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            if (line.startsWith("data:")) {
-                                String data = line.substring(5);
-                                if ("[DONE]".equals(data.trim())) {
-                                    emitter.send(SseEmitter.event().name("done").data("[DONE]"));
-                                } else {
-                                    agentContentBuilder.append(data);
-                                    emitter.send(SseEmitter.event().data(data));
-                                }
-                            }
+                webClient.post()
+                    .uri("/internal/agent/orchestrate/stream")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .bodyValue(orchRequest)
+                    .accept(MediaType.TEXT_EVENT_STREAM)
+                    .retrieve()
+                    .bodyToFlux(String.class)
+                    .doOnNext(data -> {
+                        try {
+                            agentContentBuilder.append(data);
+                            emitter.send(SseEmitter.event().data(data));
+                        } catch (IOException e) {
+                            log.warn("SSE send failed", e);
                         }
-                        return null;
-                    });
+                    })
+                    .doOnComplete(() -> {
+                        try {
+                            emitter.send(SseEmitter.event().name("done").data("[DONE]"));
+                        } catch (IOException e) {
+                            log.warn("SSE done send failed", e);
+                        }
+                    })
+                    .blockLast(Duration.ofMinutes(5));
 
                 agentContent = agentContentBuilder.toString();
 
