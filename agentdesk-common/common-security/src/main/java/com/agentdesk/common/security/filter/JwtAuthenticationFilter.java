@@ -38,27 +38,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(token) && jwtUtils.validateToken(token)) {
             try {
                 Claims claims = jwtUtils.parseToken(token);
-
-                AuthUser authUser = new AuthUser();
-                authUser.setUserId(claims.get("userId", Long.class));
-                authUser.setUsername(claims.get("username", String.class));
-                authUser.setRoleCode(claims.get("roleCode", String.class));
-                authUser.setTenantId(claims.get("tenantId", Long.class));
-
-                List<SimpleGrantedAuthority> authorities = Collections.singletonList(
-                        new SimpleGrantedAuthority(authUser.getRoleCode())
-                );
-
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(authUser, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-
-                UserContext.setCurrentUser(authUser);
-
-                request.setAttribute("currentUser", authUser);
+                setAuthentication(claims, request);
             } catch (Exception e) {
                 log.warn("Failed to set user authentication: {}", e.getMessage());
             }
+        } else if (StringUtils.hasText(request.getHeader("X-User-Id"))) {
+            AuthUser authUser = new AuthUser();
+            authUser.setUserId(Long.valueOf(request.getHeader("X-User-Id")));
+            authUser.setUsername(request.getHeader("X-Username"));
+            authUser.setTenantId(parseLong(request.getHeader("X-Tenant-Id")));
+
+            List<SimpleGrantedAuthority> authorities = Collections.singletonList(
+                    new SimpleGrantedAuthority("ROLE_USER")
+            );
+
+            UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(authUser, null, authorities);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            UserContext.setCurrentUser(authUser);
+            request.setAttribute("currentUser", authUser);
         }
 
         try {
@@ -68,11 +67,39 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
     }
 
+    private void setAuthentication(Claims claims, HttpServletRequest request) {
+        AuthUser authUser = new AuthUser();
+        authUser.setUserId(claims.get("userId", Long.class));
+        authUser.setUsername(claims.get("username", String.class));
+        authUser.setRoleCode(claims.get("roleCode", String.class));
+        authUser.setTenantId(claims.get("tenantId", Long.class));
+
+        List<SimpleGrantedAuthority> authorities = Collections.singletonList(
+                new SimpleGrantedAuthority(authUser.getRoleCode())
+        );
+
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(authUser, null, authorities);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        UserContext.setCurrentUser(authUser);
+        request.setAttribute("currentUser", authUser);
+    }
+
     private String extractToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    private Long parseLong(String value) {
+        if (value == null || value.isEmpty()) return null;
+        try {
+            return Long.valueOf(value);
+        } catch (NumberFormatException e) {
+            return null;
+        }
     }
 }

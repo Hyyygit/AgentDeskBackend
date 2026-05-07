@@ -32,7 +32,18 @@ spring:
               filters:
                 - StripPrefix=1
 
-            # Conversation Service
+            # Conversation Service - SSE streaming needs dedicated route
+            - id: conversation-service-stream
+              uri: lb://conversation-service
+              predicates:
+                - Path=/api/conversations/messages/stream
+              filters:
+                - StripPrefix=1
+                - name: DedupeResponseHeader
+                  args:
+                    name: Access-Control-Allow-Origin
+                    strategy: RETAIN_FIRST
+            # Conversation Service - regular routes
             - id: conversation-service
               uri: lb://conversation-service
               predicates:
