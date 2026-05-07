@@ -10,16 +10,16 @@ USE `agentdesk-user`;
 -- 1. 用户数据 (agentdesk-user.user)
 -- ============================================================
 INSERT INTO `user` (`id`, `tenant_id`, `user_no`, `user_name`, `password`, `real_name`, `email`, `phone`, `department`, `role_code`, `status`, `deleted`) VALUES
-(1, 0, 'U2026050600001', 'admin',      '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5Eh', '系统管理员', 'admin@agentdesk.com',   '13800000001', '技术部',   'ADMIN',   1, 0),
-(2, 0, 'U2026050600002', 'zhangsan',   '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5Eh', '张三',       'zhangsan@qq.com',       '13800000002', '市场部',   'USER',    1, 0),
-(3, 0, 'U2026050600003', 'lisi',       '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5Eh', '李四',       'lisi@qq.com',           '13800000003', '财务部',   'USER',    1, 0),
-(4, 0, 'U2026050600004', 'wangwu',     '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5Eh', '王五',       'wangwu@163.com',        '13800000004', '人事部',   'USER',    1, 0),
-(5, 0, 'U2026050600005', 'zhaoliu',    '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5Eh', '赵六',       'zhaoliu@qq.com',        '13800000005', '研发部',   'USER',    1, 0),
-(6, 0, 'U2026050600006', 'sunqi',      '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5Eh', '孙七',       'sunqi@qq.com',          '13800000006', '运维部',   'AGENT',   1, 0),
-(7, 0, 'U2026050600007', 'zhouba',     '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5Eh', '周八',       'zhouba@163.com',        '13800000007', '客服部',   'AGENT',   1, 0),
-(8, 0, 'U2026050600008', 'wujiu',      '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5Eh', '吴九',       'wujiu@qq.com',          '13800000008', '技术部',   'MANAGER', 1, 0),
-(9, 0, 'U2026050600009', 'zhengshi',   '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5Eh', '郑十',       'zhengshi@163.com',      '13800000009', '产品部',   'USER',    1, 0),
-(10, 0, 'U2026050600010','liuyi',      '$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5Eh', '刘一',       'liuyi@qq.com',          '13800000010', '市场部',   'USER',    1, 0);
+(1, 0, 'U2026050600001', 'admin',      '$2a$10$rDrHzbeAtI9EhwHSr/TsWeTY.DmwoRNCX5KNH2dH41/gJXtZt0JdG', '系统管理员', 'admin@agentdesk.com',   '13800000001', '技术部',   'ADMIN',   1, 0),
+(2, 0, 'U2026050600002', 'zhangsan',   '$2a$10$rDrHzbeAtI9EhwHSr/TsWeTY.DmwoRNCX5KNH2dH41/gJXtZt0JdG', '张三',       'zhangsan@qq.com',       '13800000002', '市场部',   'USER',    1, 0),
+(3, 0, 'U2026050600003', 'lisi',       '$2a$10$rDrHzbeAtI9EhwHSr/TsWeTY.DmwoRNCX5KNH2dH41/gJXtZt0JdG', '李四',       'lisi@qq.com',           '13800000003', '财务部',   'USER',    1, 0),
+(4, 0, 'U2026050600004', 'wangwu',     '$2a$10$rDrHzbeAtI9EhwHSr/TsWeTY.DmwoRNCX5KNH2dH41/gJXtZt0JdG', '王五',       'wangwu@163.com',        '13800000004', '人事部',   'USER',    1, 0),
+(5, 0, 'U2026050600005', 'zhaoliu',    '$2a$10$rDrHzbeAtI9EhwHSr/TsWeTY.DmwoRNCX5KNH2dH41/gJXtZt0JdG', '赵六',       'zhaoliu@qq.com',        '13800000005', '研发部',   'USER',    1, 0),
+(6, 0, 'U2026050600006', 'sunqi',      '$2a$10$rDrHzbeAtI9EhwHSr/TsWeTY.DmwoRNCX5KNH2dH41/gJXtZt0JdG', '孙七',       'sunqi@qq.com',          '13800000006', '运维部',   'AGENT',   1, 0),
+(7, 0, 'U2026050600007', 'zhouba',     '$2a$10$rDrHzbeAtI9EhwHSr/TsWeTY.DmwoRNCX5KNH2dH41/gJXtZt0JdG', '周八',       'zhouba@163.com',        '13800000007', '客服部',   'AGENT',   1, 0),
+(8, 0, 'U2026050600008', 'wujiu',      '$2a$10$rDrHzbeAtI9EhwHSr/TsWeTY.DmwoRNCX5KNH2dH41/gJXtZt0JdG', '吴九',       'wujiu@qq.com',          '13800000008', '技术部',   'MANAGER', 1, 0),
+(9, 0, 'U2026050600009', 'zhengshi',   '$2a$10$rDrHzbeAtI9EhwHSr/TsWeTY.DmwoRNCX5KNH2dH41/gJXtZt0JdG', '郑十',       'zhengshi@163.com',      '13800000009', '产品部',   'USER',    1, 0),
+(10, 0, 'U2026050600010','liuyi',      '$2a$10$rDrHzbeAtI9EhwHSr/TsWeTY.DmwoRNCX5KNH2dH41/gJXtZt0JdG', '刘一',       'liuyi@qq.com',          '13800000010', '市场部',   'USER',    1, 0);
 
 -- 用户-会话关联
 INSERT INTO `user_conversation_info` (`id`, `tenant_id`, `user_id`, `conversation_id`, `deleted`) VALUES

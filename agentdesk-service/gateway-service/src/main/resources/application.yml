@@ -5,75 +5,55 @@ spring:
   application:
     name: gateway-service
 
-  config:
-    import:
-      - optional:nacos:gateway.yml?group=DEFAULT_GROUP&refreshEnabled=true
-
   cloud:
     nacos:
-      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:18848}
-      config:
-        namespace: ${NACOS_NAMESPACE:72c65630-17c3-4239-b14d-dd92d3705774}
       discovery:
-        namespace: ${NACOS_NAMESPACE:72c65630-17c3-4239-b14d-dd92d3705774}
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:agentdesk}
+      config:
+        server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:8848}
+        namespace: ${NACOS_NAMESPACE:agentdesk}
+        file-extension: yml
+        shared-configs:
+          - data-id: agentdesk-common.yml
+            group: DEFAULT_GROUP
+            refresh: true
 
     gateway:
       server:
         webflux:
-          discovery:
-            locator:
-              enabled: false
           routes:
             # Auth/User Service
             - id: user-service
-              uri: lb://user-service
+              uri: http://localhost:9001
               predicates:
                 - Path=/api/user/**
-              filters:
-                - StripPrefix=0
-
             # Conversation Service
             - id: conversation-service
-              uri: lb://conversation-service
+              uri: http://localhost:9002
               predicates:
                 - Path=/api/conversations/**
-              filters:
-                - StripPrefix=0
-
             # Ticket Service
             - id: ticket-service
-              uri: lb://ticket-service
+              uri: http://localhost:9000
               predicates:
                 - Path=/api/tickets/**
-              filters:
-                - StripPrefix=0
-
             # Knowledge Service
             - id: knowledge-service
-              uri: lb://knowledge-service
+              uri: http://localhost:9003
               predicates:
                 - Path=/api/knowledge/**
-              filters:
-                - StripPrefix=0
-
             # Orchestrator Service
             - id: orchestrator-service
-              uri: lb://agent-orchestrator-service
+              uri: http://localhost:9005
               predicates:
                 - Path=/api/orchestrator/**
-              filters:
-                - StripPrefix=0
-
             # Audit Service
             - id: audit-log-service
-              uri: lb://audit-log-service
+              uri: http://localhost:9004
               predicates:
                 - Path=/api/audit/**,/api/log/**
-              filters:
-                - StripPrefix=0
 
-          default-filters:
-            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
           globalcors:
             cors-configurations:
               '[/**]':
@@ -81,6 +61,11 @@ spring:
                 allowedMethods: "*"
                 allowedHeaders: "*"
                 allowCredentials: false
+
+jwt:
+  secret: YWdlbnRkZXNrLWludGVsbGlnZW50LXdvcmstb3JkZXItc3lzdGVtLXNlY3JldC1rZXktMjAyNg==
+  access-token-expiration: 1800000
+  refresh-token-expiration: 604800000
 
 app:
   security:
