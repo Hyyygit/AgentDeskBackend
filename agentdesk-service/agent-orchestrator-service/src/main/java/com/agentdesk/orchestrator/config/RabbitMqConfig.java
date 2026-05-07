@@ -5,11 +5,18 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
+import org.springframework.amqp.support.converter.MessageConverter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class RabbitMqConfig {
+    @Bean
+    public MessageConverter messageConverter() {
+        return new Jackson2JsonMessageConverter();
+    }
+
     @Bean
     public TopicExchange agentDeskExchange() {
         return new TopicExchange(MqConstants.EXCHANGE_NAME, true, false);
@@ -21,8 +28,8 @@ public class RabbitMqConfig {
     }
 
     @Bean
-    public Binding auditBinding(Queue auditQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(auditQueue).to(exchange).with("agent.run.#");
+    public Binding auditBinding() {
+        return BindingBuilder.bind(auditQueue()).to(agentDeskExchange()).with("agent.run.#");
     }
 
     @Bean
@@ -31,8 +38,8 @@ public class RabbitMqConfig {
     }
 
     @Bean
-    public Binding curationBinding(Queue curationQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(curationQueue).to(exchange).with("ticket.resolved");
+    public Binding curationBinding() {
+        return BindingBuilder.bind(curationQueue()).to(agentDeskExchange()).with(MqConstants.KEY_TICKET_RESOLVED);
     }
 
     @Bean
@@ -41,7 +48,7 @@ public class RabbitMqConfig {
     }
 
     @Bean
-    public Binding draftBinding(Queue draftQueue, TopicExchange exchange) {
-        return BindingBuilder.bind(draftQueue).to(exchange).with("knowledge.draft.#");
+    public Binding draftBinding() {
+        return BindingBuilder.bind(draftQueue()).to(agentDeskExchange()).with("knowledge.draft.#");
     }
 }

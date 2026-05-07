@@ -1,5 +1,20 @@
 server:
   port: 9007
+spring:
+  application:
+    name: ops-admin-service
+
+  config:
+    import:
+      - optional:nacos:agentdesk-common.yml?group=DEFAULT_GROUP&refreshEnabled=true
+
+  cloud:
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:18848}
+      config:
+        namespace: ${NACOS_NAMESPACE:72c65630-17c3-4239-b14d-dd92d3705774}
+      discovery:
+        namespace: ${NACOS_NAMESPACE:72c65630-17c3-4239-b14d-dd92d3705774}
 
 management:
   endpoints:

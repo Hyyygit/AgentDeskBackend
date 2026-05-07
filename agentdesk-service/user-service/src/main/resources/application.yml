@@ -2,5 +2,22 @@ server:
   port: 9001
 
 spring:
+  application:
+    name: user-service
+
+  config:
+    import:
+      - optional:nacos:agentdesk-common.yml?group=DEFAULT_GROUP&refreshEnabled=true
+
+  cloud:
+    nacos:
+      server-addr: ${NACOS_SERVER_ADDR:127.0.0.1:18848}
+      config:
+        namespace: ${NACOS_NAMESPACE:72c65630-17c3-4239-b14d-dd92d3705774}
+      discovery:
+        namespace: ${NACOS_NAMESPACE:72c65630-17c3-4239-b14d-dd92d3705774}
+
+  datasource:
+    url: jdbc:mysql://localhost:3307/agentdesk-user?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     hikari:
       pool-name: UserServiceHikariPool

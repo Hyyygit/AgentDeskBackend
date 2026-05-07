@@ -11,7 +11,9 @@ import com.agentdesk.user.domain.UserPO;
 import com.agentdesk.user.service.IUserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,7 +36,7 @@ public class UserController extends BaseController {
 
     @Autowired
     private IUserService userService;
-
+    
     @Operation(summary = "获取当前用户信息")
     @GetMapping("/profile")
     public AjaxResult profile() {

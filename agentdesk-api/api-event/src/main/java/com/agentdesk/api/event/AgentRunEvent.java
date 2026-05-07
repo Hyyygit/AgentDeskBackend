@@ -25,5 +25,6 @@ public class AgentRunEvent implements Serializable {
     private String gateResult;
     private Integer latencyMs;
     private Integer costTokens;
+    private String errorMessage;
     private LocalDateTime timestamp;
 }
