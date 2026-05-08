@@ -2,6 +2,8 @@ package com.agentdesk.orchestrator.service.impl;
 
 import com.agentdesk.api.orchestrator.dto.OrchestrateRequest;
 import com.agentdesk.api.orchestrator.dto.OrchestrateResponse;
+import com.agentdesk.common.security.context.UserContext;
+import com.agentdesk.common.security.domain.AuthUser;
 import com.agentdesk.orchestrator.agent.coordinator.CoordinatorAgent;
 import com.agentdesk.orchestrator.agent.trace.AgentTraceRecorder;
 import com.agentdesk.orchestrator.service.OrchestratorService;
@@ -34,12 +36,12 @@ public class OrchestratorServiceImpl implements OrchestratorService {
             OrchestrateResponse response = coordinatorAgent.orchestrate(request);
             long elapsed = System.currentTimeMillis() - startTime;
             log.info("Orchestration completed in {}ms, ticket={}, needHuman={}",
-                     elapsed, response.getTicketNo(), response.getNeedHuman());
+                    elapsed, response.getTicketNo(), response.getNeedHuman());
             return response;
         } catch (Exception e) {
             log.error("Orchestration failed", e);
             traceRecorder.recordError(request.getRequestId(), "COORDINATOR", e.getMessage(),
-                                      System.currentTimeMillis() - startTime);
+                    System.currentTimeMillis() - startTime);
 
             OrchestrateResponse fallback = new OrchestrateResponse();
             fallback.setRequestId(request.getRequestId());
@@ -54,8 +56,14 @@ public class OrchestratorServiceImpl implements OrchestratorService {
     public SseEmitter orchestrateStream(OrchestrateRequest request) {
         SseEmitter emitter = new SseEmitter(300000L);
 
+        AuthUser authUser = UserContext.getCurrentUser();
+
         executorService.submit(() -> {
             try {
+                if (authUser != null) {
+                    UserContext.setCurrentUser(authUser);
+                }
+
                 coordinatorAgent.orchestrateStream(request, chunk -> {
                     try {
                         String trimmed = chunk.trim();
@@ -73,8 +81,11 @@ public class OrchestratorServiceImpl implements OrchestratorService {
                 log.error("SSE orchestrator stream failed", e);
                 try {
                     emitter.send(SseEmitter.event().name("error").data(e.getMessage()));
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
                 emitter.completeWithError(e);
+            } finally {
+                UserContext.clear();
             }
         });
 

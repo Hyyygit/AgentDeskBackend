@@ -3,6 +3,8 @@ package com.agentdesk.orchestrator.agent.tool;
 import com.agentdesk.api.ticket.dto.TicketCreateRequest;
 import com.agentdesk.api.ticket.dto.TicketDTO;
 import com.agentdesk.api.ticket.feign.TicketFeignClient;
+import com.agentdesk.common.security.context.UserContext;
+import com.agentdesk.common.security.domain.AuthUser;
 import com.agentdesk.orchestrator.agent.AbstractAgent;
 import com.agentdesk.orchestrator.agent.triage.TriageResult;
 import org.springframework.beans.factory.annotation.Autowired;
