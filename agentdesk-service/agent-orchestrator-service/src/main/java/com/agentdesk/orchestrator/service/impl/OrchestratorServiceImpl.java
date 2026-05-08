@@ -60,7 +60,7 @@ public class OrchestratorServiceImpl implements OrchestratorService {
 
         executorService.submit(() -> {
             try {
-                if (authUser != null) {
+                if (authUser != null){
                     UserContext.setCurrentUser(authUser);
                 }
 

@@ -24,6 +24,9 @@ public class ToolAgent extends AbstractAgent {
     public ToolResult execute(String action, TriageResult triageResult, Long userId, Long conversationId) {
         ToolResult result = new ToolResult();
 
+        AuthUser authUser = UserContext.getCurrentUser();
+        System.out.println(authUser.getUserId());
+
         try {
             if ("CREATE_TICKET".equals(action)) {
                 Integer category = mapCategory(triageResult.getCategory());
@@ -36,7 +39,8 @@ public class ToolAgent extends AbstractAgent {
                 request.setPriority(priority);
                 request.setConversationId(conversationId);
 
-                TicketDTO ticket = ticketFeignClient.createTicket(request);
+                TicketDTO ticket = ticketFeignClient.createTicket(request).getData();
+                System.out.println(ticket.getTicketNo());
                 result.setToolName("CREATE_TICKET");
                 result.setSuccess(true);
                 result.setTicketId(ticket.getId());

@@ -8,6 +8,7 @@ import com.agentdesk.api.orchestrator.feign.OrchestratorFeignClient;
 import com.agentdesk.common.core.enums.ErrorCodeEnum;
 import com.agentdesk.common.core.exception.base.BaseException;
 import com.agentdesk.common.security.context.UserContext;
+import com.agentdesk.common.security.domain.AuthUser;
 import com.agentdesk.conversation.domain.ConversationMessagePO;
 import com.agentdesk.conversation.domain.ConversationPO;
 import com.agentdesk.conversation.mapper.ConversationMapper;
@@ -143,8 +144,14 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
     public void sendStreamMessage(Long conversationId, String content, SseEmitter emitter) {
         // Capture userId on the request thread BEFORE entering the async executor
         Long userId = UserContext.getCurrentUserId();
+        Long tenantId = UserContext.getCurrentTenantId();
+        AuthUser authUser = UserContext.getCurrentUser();
 
         streamExecutor.submit(() -> {
+            if (authUser != null) {
+                UserContext.setCurrentUser(authUser);
+            }
+
             String agentContent = null;
             String requestId = IdUtil.fastSimpleUUID();
             try {
@@ -175,6 +182,8 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
                     .contentType(MediaType.APPLICATION_JSON)
                     .bodyValue(orchRequest)
                     .accept(MediaType.TEXT_EVENT_STREAM)
+                    .header("X-User-Id", userId != null ? String.valueOf(userId) : "0")
+                    .header("X-Tenant-Id", tenantId != null ? String.valueOf(tenantId) : "0")
                     .retrieve()
                     .bodyToFlux(String.class)
                     .doOnNext(data -> {
@@ -222,6 +231,8 @@ public class ConversationServiceImpl extends ServiceImpl<ConversationMapper, Con
                 } catch (IOException ex) {
                     emitter.completeWithError(ex);
                 }
+            } finally {
+                UserContext.clear();
             }
         });
     }

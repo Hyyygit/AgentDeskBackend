@@ -16,13 +16,13 @@ spring:
         namespace: ${NACOS_NAMESPACE:72c65630-17c3-4239-b14d-dd92d3705774}
       discovery:
         namespace: ${NACOS_NAMESPACE:72c65630-17c3-4239-b14d-dd92d3705774}
-    openfeign:
-      client:
-        config:
-          ticket-service:
-            url: http://localhost:9000
-          knowledge-service:
-            url: http://localhost:9003
+    #openfeign:
+    #  client:
+    #    config:
+    #      ticket-service:
+    #        url: http://localhost:9000
+    #      knowledge-service:
+    #        url: http://localhost:9003
 
   datasource:
     url: jdbc:mysql://localhost:3307/agentdesk-log?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai

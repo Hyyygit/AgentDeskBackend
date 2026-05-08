@@ -1,6 +1,7 @@
 package com.agentdesk.ticket.converter;
 
 import cn.hutool.core.bean.BeanUtil;
+import com.agentdesk.api.ticket.dto.TicketDTO;
 import com.agentdesk.ticket.domain.TicketPO;
 import com.agentdesk.ticket.domain.TicketVO;
 
@@ -12,7 +13,7 @@ public class TicketConverter {
         return BeanUtil.copyProperties(po, TicketVO.class);
     }
 
-    public static TicketVO toDTO(TicketPO po) {
-        return BeanUtil.copyProperties(po, TicketVO.class);
+    public static TicketDTO toDTO(TicketPO po) {
+        return BeanUtil.copyProperties(po, TicketDTO.class);
     }
 }

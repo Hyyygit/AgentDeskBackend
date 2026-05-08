@@ -1,8 +1,10 @@
 package com.agentdesk.ticket.controller;
 
 import com.agentdesk.api.ticket.dto.TicketCreateRequest;
+import com.agentdesk.api.ticket.dto.TicketDTO;
 import com.agentdesk.common.web.controller.BaseController;
 import com.agentdesk.common.web.result.AjaxResult;
+import com.agentdesk.common.web.result.ServiceInnerResult;
 import com.agentdesk.ticket.converter.TicketConverter;
 import com.agentdesk.ticket.domain.TicketPO;
 import com.agentdesk.ticket.service.ITicketService;
@@ -19,11 +21,11 @@ public class TicketInternalController extends BaseController {
 
     private final ITicketService ticketService;
 
-    @PostMapping("/")
-    public AjaxResult createTicket(@Valid @RequestBody TicketCreateRequest request,
-                                   @RequestHeader("X-User-Id") Long userId) {
+    @PostMapping("/create")
+    public ServiceInnerResult<TicketDTO> createTicket(@Valid @RequestBody TicketCreateRequest request,
+                                                      @RequestHeader("X-User-Id") Long userId) {
         TicketPO ticket = ticketService.createTicket(request, userId);
-        return success(TicketConverter.toVO(ticket));
+        return ServiceInnerResult.success(TicketConverter.toDTO(ticket));
     }
 
     @GetMapping("/{ticketId}")
